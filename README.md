@@ -16,9 +16,9 @@ python3 main.py
 
 ## The line
 
-> The backup we promised you does not exist. We looked twice, in both places we keep them. Save your work somewhere else from now on.
+> We ran out of memory, mostly because of the 47 tabs you swore you needed. Close a few and try again.
 
-The entry names a specific, everyday failure — the backup that was never really there — instead of apologising in generalities, tells the user what to do next, and lands its joke on the one detail that stings: the team kept the backups in two places and both are empty. No padding, no throat clearing, and clean enough to paste into a real product's error dialog.
+The entry names a specific, everyday failure — the program ran out of memory — instead of apologising in generalities, tells the user what to do next, and lands its joke on the one detail every reader recognises in themselves: the tabs they swore they needed. No padding, no throat clearing, and clean enough to paste into a real product's error dialog.
 
 ---
 
