@@ -12,11 +12,13 @@ One line of software error copy that tells the user the brutal truth about what 
 python3 main.py
 ```
 
-`main.py` (Python 3 standard library only) writes a single-line error message of at most 200 characters to `$MAKEFUN_OUTPUT_DIR/entry.txt` (default `/output`), naming the real failure in plain words, the joke intact, and what to do next. It self-checks the gate before writing: UTF-8 text, 1–200 characters, not only whitespace, exactly one line.
+`main.py` (Python 3 standard library only) writes a single-line error message of at most 200 characters to `$MAKEFUN_OUTPUT_DIR/entry.txt` (default `/output`). It self-checks the gate before writing: UTF-8 text, 1–200 characters, not only whitespace, exactly one line, no trailing newline.
 
 ## The line
 
-The entry names a specific, everyday failure — the backup that was never really there — instead of apologising in generalities, and tells the user what to do next. No padding, no throat clearing, and clean enough to paste into a real product's error dialog.
+> Wrong password — and no, we can't tell you if the username was wrong too. Caps Lock is on, by the way. Try again.
+
+The entry names a specific, everyday failure — a wrong password — instead of apologising in generalities, tells the user what to do next, and lands its joke on the one detail the user can actually check. No padding, no throat clearing, and clean enough to paste into a real product's error dialog.
 
 ---
 
