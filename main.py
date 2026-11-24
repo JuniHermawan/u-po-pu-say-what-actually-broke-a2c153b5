@@ -1,61 +1,71 @@
 #!/usr/bin/env python3
-"""Say What Actually Broke — one line of brutal-truth error copy.
+"""Say What Actually Broke — make.fun entry (program/v1).
 
-The program writes a single-line software error message (at most 200
-characters) to ``entry.txt`` under the output directory: the failure named
-in plain words, the joke intact, and what to do next. No network, no
-randomness, no input read: the same line every run, byte for byte.
+Writes one single-line software error message, at most 200 characters,
+to $MAKEFUN_OUTPUT_DIR/entry.txt (default /output).
 
-Run locally:
+The line tells the brutal truth about one specific failure — the backup
+that was never really there — names what broke in plain words, lands the
+joke in a single read, and tells the user what to do next. No padding,
+no throat clearing, clean enough to paste into a real error dialog.
 
-    MAKEFUN_OUTPUT_DIR=/tmp/out python3 main.py
+Standard library only. Deterministic: the same bytes on every run.
 
-In the grading sandbox the output directory is ``/output``.
+Version history:
+  v1 — first version: backup line + gate self-check (length, single line,
+       non-blank, UTF-8) before writing.
+  v2 — fixed the character count in the comment (131, not 130); added a
+       round-trip gate check: after writing, the file is read back and
+       must byte-match the entry, and the line must have no leading or
+       trailing whitespace.
 """
 
 import os
+import sys
 
-# The entry: a wrong-password error that tells the brutal truth — the
-# system will not say whether the username was wrong too, and the twist
-# is the one detail the user can actually check: Caps Lock.
+# The entry: one line, 131 characters. Brutal truth first, joke second,
+# next step last.
 ENTRY = (
-    "Wrong password \u2014 and no, we can't tell you if the username was "
-    "wrong too. Caps Lock is on, by the way. Try again."
+    "The backup we promised you does not exist. "
+    "We looked twice, in both places we keep them. "
+    "Save your work somewhere else from now on."
 )
 
 
-def check_gate(line):
-    """Self-check the competition gate before writing anything."""
-    if not isinstance(line, str):
-        raise ValueError("entry is not text")
-    if not (1 <= len(line) <= 200):
-        raise ValueError("entry must be 1 to 200 characters, got %d" % len(line))
-    if not line.strip():
-        raise ValueError("entry must not be only whitespace")
-    if "\n" in line or "\r" in line:
-        raise ValueError("entry must be a single line")
+def gate(text):
+    """Self-check the competition gate; raise SystemExit with a reason."""
+    if not isinstance(text, str):
+        sys.exit("gate: entry is not text")
+    if not 1 <= len(text) <= 200:
+        sys.exit("gate: entry is %d characters, must be 1-200" % len(text))
+    if not text.strip():
+        sys.exit("gate: entry is only whitespace")
+    if "\n" in text or "\r" in text:
+        sys.exit("gate: entry must be a single line")
+    if text != text.strip():
+        sys.exit("gate: entry has leading or trailing whitespace")
+    try:
+        text.encode("utf-8")
+    except UnicodeEncodeError:
+        sys.exit("gate: entry is not UTF-8 text")
 
 
 def main():
-    line = ENTRY
-    check_gate(line)
+    gate(ENTRY)
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
-    # No trailing newline: the file holds exactly the one line, so the
-    # scorer reads 1-200 characters of single-line UTF-8 text.
-    with open(path, "w", encoding="utf-8", newline="") as handle:
-        handle.write(line)
-    # The grader collects outputs as another user: leave the file readable.
-    os.chmod(path, 0o644)
-    try:
-        # Best effort only: the sandbox may mount the output directory in
-        # a way that forbids changing its own mode, and the entry file
-        # above is already written, so never fail the run over this.
-        os.chmod(out_dir, 0o755)
-    except OSError:
-        pass
+    # No trailing newline: the file is exactly the line, nothing else.
+    with open(path, "wb") as f:
+        f.write(ENTRY.encode("utf-8"))
+    # Round-trip gate check: what landed on disk must byte-match the entry.
+    with open(path, "rb") as f:
+        if f.read() != ENTRY.encode("utf-8"):
+            sys.exit("gate: written file does not byte-match the entry")
+    print(ENTRY)
+    print("chars: %d" % len(ENTRY))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

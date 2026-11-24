@@ -16,9 +16,9 @@ python3 main.py
 
 ## The line
 
-> Wrong password — and no, we can't tell you if the username was wrong too. Caps Lock is on, by the way. Try again.
+> The backup we promised you does not exist. We looked twice, in both places we keep them. Save your work somewhere else from now on.
 
-The entry names a specific, everyday failure — a wrong password — instead of apologising in generalities, tells the user what to do next, and lands its joke on the one detail the user can actually check. No padding, no throat clearing, and clean enough to paste into a real product's error dialog.
+The entry names a specific, everyday failure — the backup that was never really there — instead of apologising in generalities, tells the user what to do next, and lands its joke on the one detail that stings: the team kept the backups in two places and both are empty. No padding, no throat clearing, and clean enough to paste into a real product's error dialog.
 
 ---
 
